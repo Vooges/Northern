@@ -1,0 +1,21 @@
+{
+	"name": "jdm-bot",
+	"version": "0.2.0",
+	"main": "src/index.js",
+	"author": "Jesse",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"@discordjs/opus": "^0.6.0",
+		"@discordjs/rest": "^0.1.0-canary.0",
+		"@discordjs/voice": "^0.6.0",
+		"discord-api-types": "^0.23.1",
+		"discord.js": "^13.1.0",
+		"ffmpeg": "^0.0.4",
+		"ffmpeg-static": "^4.4.0",
+		"libsodium-wrappers": "^0.7.9",
+		"mysql": "^2.18.1",
+		"yt-search": "^2.10.1",
+		"ytdl-core": "^4.9.1"
+	}
+}
