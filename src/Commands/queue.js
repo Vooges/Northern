@@ -32,14 +32,16 @@ function createEmbed(message, queue){
 
 module.exports = new Command({
 	name: "queue",
+    aliases: [],
 	description: "Gets the server queue",
 	permission: "SEND_MESSAGES",
 	async run(message, args, client) {
 		const connection = getVoiceConnection(message.member.guild.id);
 
-		if(!connection) return message.reply('Unable to display queue');
+		if(!connection)
+            return message.reply('Unable to display queue');
 
-        //check if bot is in same channel as user
+        //TODO: check if bot is in same channel as user
 
         queue = client.queue.get(message.member.guild.id);
 

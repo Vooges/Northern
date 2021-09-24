@@ -9,20 +9,24 @@ function arrayRemove(arr, value) {
 	});
 }
 
-module.exports = new Command({ //does not actually remove from queue
+module.exports = new Command({
 	name: "remove",
+	aliases: [],
 	description: "Removes the specified song from the queue",
 	permission: "SEND_MESSAGES",
 	async run(message, args, client) {
 		const connection = getVoiceConnection(message.member.guild.id);
 
-		if(!connection) return message.reply('Unable to remove since there\'s no queue');
+		if(!connection)
+			return message.reply('Unable to remove since there\'s no queue');
 
 		queue = client.queue.get(message.member.guild.id);
 
-		if(isNaN(args[1]) || args[1] < 1) return message.reply(`${args[1]} is not a valid number. Correct usage: ${config.prefix}remove 3`);
+		if(isNaN(args[1]) || args[1] < 1)
+			return message.reply(`${args[1]} is not a valid number. Correct usage: ${config.prefix}remove 3`);
 
-		if(queue.length < args[1]) return message.reply(`${args[1]} is not a valid number. The queue is only: ${queuelength} long.`);
+		if(queue.length < args[1])
+			return message.reply(`${args[1]} is not a valid number. The queue is only: ${queuelength} long.`);
 
 		const removed = queue[args[1]].title;
 

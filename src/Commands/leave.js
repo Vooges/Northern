@@ -3,14 +3,16 @@ const Command = require("../Structures/Command.js");
 
 module.exports = new Command({
 	name: "leave",
+	aliases: [],
 	description: "Leaves the voice channel",
 	permission: "SEND_MESSAGES",
 	async run(message, args, client) {
 		const connection = getVoiceConnection(message.member.guild.id);
 
-		if(!connection) return message.reply('Unable to leave since I\'m not in a voice channel');
+		if(!connection)
+			return message.reply('Unable to leave since I\'m not in a voice channel');
 
-		//check if bot is in same channel as user
+		//TODO: check if bot is in same channel as user
 
 		connection.disconnect();
 

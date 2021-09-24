@@ -12,6 +12,7 @@ async function measurePing(message, args, client){
 
 module.exports = new Command({
 	name: "ping",
+	aliases: [],
 	description: "Shows the ping of the bot!",
 	permission: "SEND_MESSAGES",
 	run(message, args, client) {

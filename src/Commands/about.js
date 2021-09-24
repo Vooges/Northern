@@ -30,6 +30,7 @@ async function createEmbed(message, args, client){
 
 module.exports = new Command({
     name: "about",
+    aliases: [],
     description: "Shows some general information about the bot and the Developer",
     permission: "SEND_MESSAGES",
     run(message, args, client){
