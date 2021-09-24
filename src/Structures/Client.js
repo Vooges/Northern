@@ -15,6 +15,7 @@ class Client extends Discord.Client {
 		this.commands = new Discord.Collection();
 		this.prefix = config.prefix;
 		this.token = config.token;
+		this.queue = new Map();
 	}
 
 	start(){

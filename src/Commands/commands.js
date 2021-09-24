@@ -24,7 +24,6 @@ function getCommands(message, args, client){
             });
         }
     );
-
     return commands; 
 }
 
@@ -33,7 +32,7 @@ function getCommands(message, args, client){
  * @param args
  * @param client
  */
-async function createEmbed(message, args, client){
+function createEmbed(message, args, client){
     const embed = new Discord.MessageEmbed();
 
     embed.setTitle("JDM.bot")
@@ -51,7 +50,7 @@ module.exports = new Command({
     name: "commands",
     description: "Shows the available commands",
     permission: "SEND_MESSAGES",
-    run(message, args, client){
+    async run(message, args, client){
         createEmbed(message, args, client);
     }
 });

@@ -1,4 +1,5 @@
 const Event = require("../Structures/Event.js");
+const config = require("../Data/config.json");
 
 module.exports = new Event("messageCreate", (client, message) => {
     if (message.author.bot) return;
@@ -9,7 +10,9 @@ module.exports = new Event("messageCreate", (client, message) => {
 
 	const command = client.commands.find(cmd => cmd.name == args[0]);
 
-	if (!command) return message.reply(`${args[0]} is not a valid command! \nUse \`%commands\` to see all available commands.`);
+	if (!command) return message.reply(
+		`${args[0]} is not a valid command! \nUse \`${config.prefix}commands\` to see all available commands.`
+	);
 
 	const permission = message.member.permissions.has(command.permission, true);
 
