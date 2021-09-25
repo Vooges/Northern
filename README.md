@@ -1,10 +1,11 @@
-# JDM.bot
+# Apollo
 
 This multi-purpose bot is a project in which I tried learning JavaScript. 
 
 **Features**
 
 * Music commands
+* Retrieve Steam game/DLC info
 * Mass message removal
 * Show server info
 * Show new members
