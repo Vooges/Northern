@@ -6,89 +6,157 @@ const {
 	StreamType,
 	AudioPlayerStatus,
 	VoiceConnectionStatus,
+    getVoiceConnection,
 } = require('@discordjs/voice');
 
 const Command = require("../Structures/Command.js");
 const ytdl = require("ytdl-core");
 const ytSearch = require("yt-search");
+const config = require("../Data/config.json");
 
-const queue = new Map(); //convert to MySQL
+function arrayRemove(arr, value) { 
+	return arr.filter(function(e){ 
+		return e == value; 
+	});
+}
 
-module.exports = {
+var queue;
+
+const player = createAudioPlayer();
+
+module.exports = new Command({
     name: 'play',
-    description: 'Advanced music bot',
+    aliases: ['skip'],
+    description: 'Plays a song or adds it to the queue',
     permission: "SEND_MESSAGES",
-    async run(message, args, client){
+    async run(message, args, client){        
+        queue = client.queue;
+
         const voiceChannel = message.member.voice.channel;
 
-        if (!voiceChannel) return message.channel.send('You need to be in a channel to execute this command!');
+        if (!voiceChannel)
+            return message.channel.send('You need to be in a channel to execute this command!');
 
-        const serverQueue = queue.get(message.guild.id);
+        serverQueue = queue.get(voiceChannel.guild.id);
 
-        if (!args.length) return message.channel.send('You need to send a URL or keywords!');
+        if(args[0] == 'skip' && serverQueue != null){
+            serverQueue.shift();
+
+		    client.queue.set(message.member.guild.id, arrayRemove(serverQueue, 0));
         
-        let song = {};
-
-        if (ytdl.validateURL(args[0])) { // doesnt work with actual URL, needs custom function
-            const songInfo = await ytdl.getInfo(args[0]);
-            
-            song = {
-                title: songInfo.videoDetails.title,
-                url: songInfo.videoDetails.video_url
-            }
+            videoPlayer(voiceChannel.guild.id, serverQueue[0], client, message);
         } else {
-            const videoFinder = async (query) =>{
-                const videoResult = await ytSearch(query);
+            if (args.length <= 1)
+            return message.reply(`Correct usage: \`${config.prefix}play Song Name\``);
+        
+            let song = {};
+
+            if (false) { //TODO: ytdl.validateURL() doesnt work with actual URL, needs custom function
+                const songInfo = await ytdl.getInfo(args[0]);
                 
-                return (videoResult.videos.length > 1) ? videoResult.videos[0] : null;
-            }
-
-            const video = await videoFinder(args.join(' '));
-
-            if (video){
                 song = {
-                    title: video.title,
-                    url: video.url,
+                    title: songInfo.videoDetails.title,
+                    url: songInfo.videoDetails.video_url
                 }
             } else {
-                message.channel.send('Error finding video.');
+                const videoFinder = async (query) =>{
+                    const videoResult = await ytSearch(query);
+                    
+                    return (videoResult.videos.length > 1) ? videoResult.videos[0] : null;
+                }
+
+                const video = await videoFinder(args.join(' '));
+
+                if (video){
+                    song = {
+                        title: video.title,
+                        url: video.url,
+                    }
+                } else {
+                    message.channel.send('Error finding video.');
+                }
             }
-        }
 
-        if (!serverQueue){
-            try {
-                const connection = joinVoiceChannel({
-                    channelId: voiceChannel.id,
-                    guildId: voiceChannel.guild.id,
-                    adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-                    selfDeaf: false,
-                    selfMute: false
-                });
+            if (!serverQueue){
+                try {
+                    const connection = joinVoiceChannel({
+                        channelId: voiceChannel.id,
+                        guildId: voiceChannel.guild.id,
+                        adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+                        songs: [],
+                        selfDeaf: false,
+                        selfMute: false,
+                    });
 
-                const player = createAudioPlayer();
+                    queue.set(voiceChannel.guild.id, connection.joinConfig.songs);
 
-                connection.subscribe(player);
+                    connection.joinConfig.songs.push(song);
 
-                const stream = ytdl(song.url, {
-                    filter: 'audioonly', 
-                    highWaterMark: 1<<25, //set ytdl-core to use 32mb, fixes (?) https://github.com/fent/node-ytdl-core/issues/405
-                });
+                    connection.subscribe(player);
 
-                player.play(createAudioResource(stream));
+                    videoPlayer(voiceChannel.guild.id, connection.joinConfig.songs[0], client, message);
 
-                message.reply(`Now playing: **${song.title}**`);
+                    player.on('error', error => {
+                        console.error(`Error: ${error.stack}`);
+                        player.stop();
+                    });
+                } catch (err) {
+                    queue.delete(voiceChannel.guild.id);
+                    
+                    message.reply('An error occured');
+                    
+                    console.error(err);
+                }
+            } else {
+                const serverQueue = queue.get(voiceChannel.guild.id);
 
-                player.on('error', error => {
-                    console.error(`Error: ${error.stack}`);
-                    player.stop();
-                });
-            } catch (err) {
-                queue.delete(voiceChannel.guild.id);
-                
-                message.reply('An error occured');
-                
-                throw err;
+                serverQueue.push(song);
+
+                return message.reply(`**${song.title}** added to queue`);
             }
         }
     }
+});
+
+async function videoPlayer(guildId, song, client, message){
+    const songQueue = queue.get(guildId);
+
+    if(!song){
+        const connection = getVoiceConnection(guildId);
+
+		//TODO: check if bot is in same channel as user
+
+        try {
+            connection.disconnect();
+        } catch (error) {
+            console.error(error);
+        }
+		
+        queue.delete(guildId);
+
+		client.voice.adapters
+			.get(`${guildId}`)
+			.destroy();
+
+		message.reply("Left the channel");
+
+        return;
+    }
+
+    const stream = ytdl(song.url, {
+        filter: 'audioonly', 
+        highWaterMark: 1<<25, //sets ytdl-core to use 32mb, fixes (?) https://github.com/fent/node-ytdl-core/issues/405
+    });
+
+    player.play(createAudioResource(stream));
+
+    message.reply(`Now playing: **${song.title}**`); //TODO: change to generic message
+
+    player.on(AudioPlayerStatus.Idle, () => { //second song occasionally stops too early?
+        songQueue.shift();
+
+        client.queue.set(message.member.guild.id, arrayRemove(songQueue, 0));
+        
+        videoPlayer(guildId, songQueue[0], client, message);
+    });
 }
