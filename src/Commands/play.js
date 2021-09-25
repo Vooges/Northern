@@ -47,12 +47,12 @@ module.exports = new Command({
             videoPlayer(voiceChannel.guild.id, serverQueue[0], client, message);
         } else {
             if (args.length <= 1)
-            return message.reply(`Correct usage: \`${config.prefix}play Song Name\``);
+                return message.reply(`Correct usage: \`${config.prefix}play Song Name\``);
         
             let song = {};
 
             if (false) { //TODO: ytdl.validateURL() doesnt work with actual URL, needs custom function
-                const songInfo = await ytdl.getInfo(args[0]);
+                const songInfo = await ytdl.getInfo(args[1]);
                 
                 song = {
                     title: songInfo.videoDetails.title,

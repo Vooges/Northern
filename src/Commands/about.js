@@ -5,7 +5,7 @@ const pjson = require("../../package.json");
 async function createEmbed(message, args, client){
     const embed = new Discord.MessageEmbed();
 
-    embed.setTitle("JDM.bot")
+    embed.setTitle("Apollo")
         .setColor("BLUE")
         .setThumbnail(client.user.avatarURL({dynamic: true}))
         .setDescription(
@@ -20,8 +20,8 @@ async function createEmbed(message, args, client){
             value: client.prefix,
             inline: true
         }, {
-            name: "Developer",
-            value: "JDM",
+            name: "Developers",
+            value: "JDM, idiidk",
             inline: true
         })
 
@@ -31,7 +31,7 @@ async function createEmbed(message, args, client){
 module.exports = new Command({
     name: "about",
     aliases: [],
-    description: "Shows some general information about the bot and the Developer",
+    description: "Shows some general information about the bot and the Developers",
     permission: "SEND_MESSAGES",
     run(message, args, client){
         createEmbed(message, args, client);

@@ -9,12 +9,8 @@ function arrayRemove(arr, value) {
 	});
 }
 
-module.exports = new Command({
-	name: "remove",
-	aliases: [],
-	description: "Removes the specified song from the queue",
-	permission: "SEND_MESSAGES",
-	async run(message, args, client) {
+function removeSongFromQueue(message, args, client){
+	try {
 		const connection = getVoiceConnection(message.member.guild.id);
 
 		if(!connection)
@@ -33,5 +29,19 @@ module.exports = new Command({
 		client.queue.set(message.member.guild.id, arrayRemove(queue, args[1]));
 		
 		message.reply(`Removed **${removed}**`);
+	} catch (error) {
+		console.error(error);
+
+		message.reply("Something went wrong.");
+	}
+}
+
+module.exports = new Command({
+	name: "remove",
+	aliases: [],
+	description: "Removes the specified song from the queue",
+	permission: "SEND_MESSAGES",
+	async run(message, args, client) {
+		removeSongFromQueue(message, args, client);
 	}
 });
