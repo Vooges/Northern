@@ -1,7 +1,5 @@
 # Apollo
 
-This multi-purpose bot is a project in which I tried learning JavaScript. 
-
 **Features**
 
 * Music commands
