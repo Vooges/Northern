@@ -5,6 +5,7 @@ const Discord = require("discord.js");
  * @param {Discord.MessageEmbed} embed 
  */
 function getCommands(message, args, client){
+    //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
     const fs = require("fs");
 
     var commands = [];
@@ -25,6 +26,12 @@ function getCommands(message, args, client){
         }
     );
 
+    commands.push({
+        name: client.prefix + "skip",
+        value: 'Skips the current song',
+        inline: false,
+    });
+
     return commands; 
 }
 
@@ -33,7 +40,8 @@ function getCommands(message, args, client){
  * @param args
  * @param client
  */
-async function createEmbed(message, args, client){
+function createEmbed(message, args, client){
+    //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
     const embed = new Discord.MessageEmbed();
 
     embed.setTitle("JDM.bot")
@@ -49,9 +57,11 @@ async function createEmbed(message, args, client){
 
 module.exports = new Command({
     name: "commands",
+    aliases: [],
     description: "Shows the available commands",
     permission: "SEND_MESSAGES",
-    run(message, args, client){
-        createEmbed(message, args, client);
+    async run(message, args, client){
+        //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
+        createEmbed(message, args, client); 
     }
 });

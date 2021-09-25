@@ -14,6 +14,7 @@ async function createEmbed(message, args, client){
         premiumTier: message.guild.premiumTier,
     }
 
+    //TODO: add server owner name if available, otherwise set 'deleted user' as server owner name
     embed.setTitle(serverInformation.name)
         .setColor("PURPLE")
         .setThumbnail(message.guild.iconURL({dynamic: true}))
@@ -36,7 +37,7 @@ async function createEmbed(message, args, client){
             name: "Default notifications",
             value: serverInformation.defaultMessageNotifications,
             inline: false
-        })
+        });
 
     message.reply({embeds: [embed]});
 
@@ -45,6 +46,7 @@ async function createEmbed(message, args, client){
 
 module.exports = new Command({
     name: "serverinfo",
+    aliases: [],
     description: "Shows some general information about the server",
     permission: "SEND_MESSAGES",
     run(message, args, client){
