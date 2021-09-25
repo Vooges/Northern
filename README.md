@@ -9,6 +9,7 @@ This multi-purpose bot is a project in which I tried learning JavaScript.
 * Show server info
 * Show new members
 * Show members that left
+* Retrieve steam game/DLC info
 
 **Installation**
 
