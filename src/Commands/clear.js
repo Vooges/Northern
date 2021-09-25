@@ -1,7 +1,8 @@
 const Command = require("../Structures/Command.js");
 
 async function clearMessages(message, args, client){
-    const amount = args[1];
+    try{
+        const amount = args[1];
 
         if(!amount || isNaN(amount)) 
             return message.reply(`\`${amount == undefined ? "Nothing" : amount}\` is not a valid number`);
@@ -16,6 +17,11 @@ async function clearMessages(message, args, client){
         const msg = await message.channel.send(`Cleared ${amountParsed} messages!`);
 
         setTimeout(() => msg.delete(), 5000);
+    } catch (error){
+        console.error(error);
+
+        message.reply("Something went wrong.");
+    }
 }
 
 module.exports = new Command({

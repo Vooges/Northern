@@ -2,6 +2,8 @@ const Event = require("../Structures/Event.js");
 const config = require("../Data/config.json");
 
 module.exports = new Event("messageCreate", (client, message) => {
+	if(message.channelId == "890570794504179762") return;
+
     if (message.author.bot) return;
 
 	if (!message.content.startsWith(client.prefix)) return;

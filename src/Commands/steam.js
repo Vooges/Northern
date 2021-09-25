@@ -10,7 +10,7 @@ const Command = require("../Structures/Command.js");
 const STEAM_GETAPPLIST_ENDPOINT =
 	"https://api.steampowered.com/ISteamApps/GetAppList/v2/";
 const STEAM_GETAPPDETAILS_ENDPOINT =
-	"https://store.steampowered.com/api/appdetails/";
+	"https://store.steampowered.com/api/appdetails/?l=english";
 
 let steamAppList = [];
 
@@ -21,7 +21,7 @@ async function fetchSteamApplist() {
 
 async function fetchSteamApp(appid) {
 	const res = await axios.get(
-		`${STEAM_GETAPPDETAILS_ENDPOINT}/?appids=${appid}`
+		`${STEAM_GETAPPDETAILS_ENDPOINT}/&appids=${appid}`
 	);
 	return res.data[`${appid}`].data;
 }
@@ -36,6 +36,7 @@ async function fetchDLCs(appids, msg) {
 
 		await msg.edit(`Retrieved DLC: **${appDetails.name}**`);
 	}
+	msg.delete();
 
 	return names;
 }
@@ -55,13 +56,21 @@ async function getImageColors(buffer, type = "image/jpeg") {
 function capitalizeFirstLetter(value) {
 	return value.charAt(0).toUpperCase() + value.slice(1);
 }
+
 function fixHtmlString(value) {
-	return HtmlToText.convert(value, {
+	var text = HtmlToText.convert(value, {
 		selectors: [{ selector: "br", format: "skip" }],
 		wordwrap: 10000,
 	})
 		.split("*")
-		.join("-");
+		.join("-")
+		.slice(0, 1021); //fixes max string length in embed field
+
+	if(text.length == 1021){
+		text = text.concat("...");
+	}
+
+	return text;
 }
 
 function createGameEmbed(appInfo, dlcs, color) {
@@ -77,7 +86,7 @@ function createGameEmbed(appInfo, dlcs, color) {
 				name: "Price",
 				value: appInfo.price_overview
 					? appInfo.price_overview.final_formatted
-					: "FREE",
+					: "N/A",
 				inline: true,
 			},
 			{
@@ -92,7 +101,7 @@ function createGameEmbed(appInfo, dlcs, color) {
 			},
 			{
 				name: "DLC",
-				value:
+				value: //too many dlcs can crash the bot due to the character limit of 1024
 					dlcs.length !== 0
 						? dlcs.map((d) => `- ${d}`).join("\n")
 						: "N/A",

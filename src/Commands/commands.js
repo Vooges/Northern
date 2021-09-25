@@ -44,8 +44,8 @@ function createEmbed(message, args, client){
     //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
     const embed = new Discord.MessageEmbed();
 
-    embed.setTitle("JDM.bot")
-        .setColor("BLUE")
+    embed.setTitle("Apollo")
+        .setColor("BLURPLE")
         .setThumbnail(client.user.avatarURL({dynamic: true}))
         .setDescription(
             "Available commands:"

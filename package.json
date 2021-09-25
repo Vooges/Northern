@@ -1,8 +1,8 @@
 {
-	"name": "jdm-bot",
-	"version": "0.7.0",
+	"name": "apollo",
+	"version": "0.9.0",
 	"main": "src/index.js",
-	"author": "Jesse",
+	"author": "Vooges",
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
