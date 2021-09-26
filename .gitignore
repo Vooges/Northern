@@ -118,4 +118,4 @@ dist
 .pnp.*
 
 # Config file
-config.json
+src/Data/config.json

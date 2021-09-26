@@ -3,7 +3,7 @@ const pjson = require("../../package.json");
 
 module.exports = new Event("ready", (client) => {
     client.user.setPresence({
-        activities: [{ name: `version: ${pjson.version}` }],
+        activities: [{ name: `version: ${pjson.version}-dev` }],
         status: 'online',
     });
 
