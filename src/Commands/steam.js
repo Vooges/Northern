@@ -76,6 +76,16 @@ function fixHtmlString(value) {
 function createGameEmbed(appInfo, dlcs, color) {
 	const embed = new Discord.MessageEmbed();
 
+	var price;
+
+	if(appInfo.is_free){
+		price = "FREE";
+	} else {
+		price = appInfo.price_overview
+			? appInfo.price_overview.final_formatted
+			: "N/A"
+	}
+
 	embed
 		.setTitle(appInfo.name)
 		.setColor(color)
@@ -84,9 +94,7 @@ function createGameEmbed(appInfo, dlcs, color) {
 		.addFields(
 			{
 				name: "Price",
-				value: appInfo.price_overview
-					? appInfo.price_overview.final_formatted
-					: "N/A",
+				value: price,
 				inline: true,
 			},
 			{
@@ -105,6 +113,91 @@ function createGameEmbed(appInfo, dlcs, color) {
 					dlcs.length !== 0
 						? dlcs.map((d) => `- ${d}`).join("\n")
 						: "N/A",
+				inline: false,
+			},
+			{
+				name: "Supported languages",
+				value: fixHtmlString(appInfo.supported_languages),
+				inline: false,
+			},
+			{
+				name: "Minimum PC requirements",
+				value: fixHtmlString(appInfo.pc_requirements.minimum)
+					.split("Minimum:")
+					.join(""),
+				inline: false,
+			},
+			{
+				name: "Recommended PC requirements",
+				value: appInfo.pc_requirements.recommended
+					? fixHtmlString(appInfo.pc_requirements.recommended)
+							.split("Recommended:")
+							.join("")
+					: "N/A",
+				inline: false,
+			},
+			{
+				name: "Genres",
+				value: appInfo.genres.map((g) => g.description).join(", "),
+				inline: false,
+			},
+			{
+				name: "Platforms",
+				value: Object.keys(appInfo.platforms)
+					.filter((k) => appInfo.platforms[k])
+					.map((k) => capitalizeFirstLetter(k))
+					.join(", "),
+				inline: true,
+			},
+			{
+				name: "Release date",
+				value: appInfo.release_date.coming_soon
+					? "coming soon"
+					: appInfo.release_date.date,
+				inline: true,
+			}
+		);
+
+	return embed;
+}
+
+function createDLCEmbed(appInfo, color) {
+	const embed = new Discord.MessageEmbed();
+
+	var price;
+
+	if(appInfo.is_free){
+		price = "FREE";
+	} else {
+		price = appInfo.price_overview
+			? appInfo.price_overview.final_formatted
+			: "N/A"
+	}
+
+	embed
+		.setTitle(appInfo.name)
+		.setColor(color)
+		.setThumbnail(appInfo.header_image)
+		.setDescription(fixHtmlString(appInfo.short_description))
+		.addFields(
+			{
+				name: "Price",
+				value: price,
+				inline: true,
+			},
+			{
+				name: "Type",
+				value: appInfo.type.toUpperCase(),
+				inline: true,
+			},
+			{
+				name: "Required age",
+				value: appInfo.required_age.toString(),
+				inline: true,
+			},
+			{
+				name: "Full game",
+				value: appInfo.fullgame.name,
 				inline: false,
 			},
 			{
@@ -192,10 +285,11 @@ async function steam(message, args, client) {
 	}
 
 	await msg.edit(`Fetching app details...`);
+	
 	const appDetails = await fetchSteamApp(app.appid);
 
 	if (!appDetails) {
-		await msg.edit(`Game **${app.name}** not found!`);
+		await msg.edit(`Error retrieving **${app.name}**`);
 		return;
 	}
 
@@ -209,13 +303,25 @@ async function steam(message, args, client) {
 	);
 
 	const saturatedColors = sortedColors.map((c) => c.saturate(1));
-	const embed = createGameEmbed(appDetails, dlcs, saturatedColors[0].hex());
+
+	var embed;
+	
+	switch(appDetails.type){
+		case 'game':
+			embed = createGameEmbed(appDetails, dlcs, saturatedColors[0].hex());
+			break;
+		case 'dlc':
+			embed = createDLCEmbed(appDetails, saturatedColors[0].hex());
+			break;
+	}
+	
 	message.reply({ embeds: [embed] });
 }
 
 module.exports = new Command({
 	name: "steam",
-	description: "Show details of steam title!",
+	aliases: [],
+	description: "Show details of steam game/DLC",
 	permission: "SEND_MESSAGES",
 	run(message, args, client) {
 		steam(message, args, client);
