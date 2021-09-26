@@ -156,7 +156,8 @@ function createGameEmbed(appInfo, dlcs, color) {
 					: appInfo.release_date.date,
 				inline: true,
 			}
-		);
+		)
+		.setFooter("Price can only be retrieved in euros as of now.");
 
 	return embed;
 }
@@ -241,7 +242,8 @@ function createDLCEmbed(appInfo, color) {
 					: appInfo.release_date.date,
 				inline: true,
 			}
-		);
+		)
+		.setFooter("Price can only be retrieved in euros as of now.");
 
 	return embed;
 }
