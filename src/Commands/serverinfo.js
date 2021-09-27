@@ -6,6 +6,8 @@ async function createEmbed(message, args, client){
     try{
         const embed = new Discord.MessageEmbed();
 
+        const owner = await message.guild.fetchOwner()
+
         const serverInformation = {
             name: message.guild.name,
             icon: message.guild.icon,
@@ -13,32 +15,48 @@ async function createEmbed(message, args, client){
             memberCount: message.guild.memberCount,
             defaultMessageNotifications: message.guild.defaultMessageNotifications,
             premiumTier: message.guild.premiumTier,
+            serverOwner: owner.user.tag,
+            afkChannel: message.guild.afkChannel.name,
+            verified: message.guild.verified,
+            createdAt: message.guild.createdAt.toUTCString(),
         }
 
-        //TODO: add server owner name if available, otherwise set 'deleted user' as server owner name
         embed.setTitle(serverInformation.name)
-            .setColor("PURPLE")
+            .setColor("GREYPLE")
             .setThumbnail(message.guild.iconURL({dynamic: true}))
             .setDescription(
                 "General server information"
             )
             .addFields({
-                name: "Members",
-                value: serverInformation.memberCount.toString(),
-                inline: false
-            }, {
-                name: "Premium tier",
-                value: serverInformation.premiumTier,
+                name: "Verified",
+                value: serverInformation.verified || "False",
                 inline: false
             }, {
                 name: "Verification level",
                 value: serverInformation.verificationLevel,
                 inline: false
             }, {
+                name: "Owner",
+                value: serverInformation.serverOwner || "N/A",
+                inline: false
+            }, {
+                name: "Members",
+                value: serverInformation.memberCount.toString(),
+                inline: false
+            }, {
                 name: "Default notifications",
                 value: serverInformation.defaultMessageNotifications,
                 inline: false
-            });
+            }, {
+                name: "Premium tier",
+                value: serverInformation.premiumTier,
+                inline: false
+            }, {
+                name: "AFK channel",
+                value: serverInformation.afkChannel || "N/A",
+                inline: false
+            })
+            .setFooter(`Server created at ${serverInformation.createdAt}`);
 
         message.reply({embeds: [embed]});
     } catch (error){

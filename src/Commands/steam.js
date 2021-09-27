@@ -16,7 +16,7 @@ let steamAppList = [];
 
 async function fetchSteamApplist() {
 	const res = await axios.get(STEAM_GETAPPLIST_ENDPOINT);
-	steamAppList = res.data.applist.apps;
+	steamAppList = res.data.applist.apps;	
 }
 
 async function fetchSteamApp(appid) {
@@ -28,13 +28,12 @@ async function fetchSteamApp(appid) {
 
 async function fetchDLCs(appids, msg) {
 	const names = [];
-	let temp = "";
+
+	msg.edit("Retrieving DLC, this may take a while");
 
 	for (const appid of appids) {
 		const appDetails = await fetchSteamApp(appid);
 		names.push(appDetails.name);
-
-		await msg.edit(`Retrieved DLC: **${appDetails.name}**`);
 	}
 	msg.delete();
 
@@ -59,12 +58,15 @@ function capitalizeFirstLetter(value) {
 
 function fixHtmlString(value) {
 	var text = HtmlToText.convert(value, {
-		selectors: [{ selector: "br", format: "skip" }],
+		selectors: [{
+			selector: "br",
+			format: "skip" 
+		}],
 		wordwrap: 10000,
 	})
-		.split("*")
-		.join("-")
-		.slice(0, 1021); //fixes max string length in embed field
+	.split("*")
+	.join("-")
+	.slice(0, 1021); //fixes max string length in embed field
 
 	if(text.length == 1021){
 		text = text.concat("...");
@@ -73,20 +75,19 @@ function fixHtmlString(value) {
 	return text;
 }
 
-function createGameEmbed(appInfo, dlcs, color) {
-	const embed = new Discord.MessageEmbed();
-
-	var price;
-
+function getFormattedPrice(appInfo) {
 	if(appInfo.is_free){
-		price = "FREE";
-	} else {
-		price = appInfo.price_overview
+		return "FREE";
+	} 
+	
+	return appInfo.price_overview
 			? appInfo.price_overview.final_formatted
-			: "N/A"
-	}
+			: "N/A";
+}
 
-	embed
+function createGameEmbed(appInfo, dlcs, color) {
+	return new Discord
+		.MessageEmbed()
 		.setTitle(appInfo.name)
 		.setColor(color)
 		.setThumbnail(appInfo.header_image)
@@ -94,7 +95,7 @@ function createGameEmbed(appInfo, dlcs, color) {
 		.addFields(
 			{
 				name: "Price",
-				value: price,
+				value: getFormattedPrice(appInfo),
 				inline: true,
 			},
 			{
@@ -157,25 +158,12 @@ function createGameEmbed(appInfo, dlcs, color) {
 				inline: true,
 			}
 		)
-		.setFooter("Price can only be retrieved in euros as of now.");
-
-	return embed;
+		.setFooter("Price can only be retrieved in euros as of now");
 }
 
 function createDLCEmbed(appInfo, color) {
-	const embed = new Discord.MessageEmbed();
-
-	var price;
-
-	if(appInfo.is_free){
-		price = "FREE";
-	} else {
-		price = appInfo.price_overview
-			? appInfo.price_overview.final_formatted
-			: "N/A"
-	}
-
-	embed
+	const embed = new Discord
+		.MessageEmbed()
 		.setTitle(appInfo.name)
 		.setColor(color)
 		.setThumbnail(appInfo.header_image)
@@ -183,7 +171,7 @@ function createDLCEmbed(appInfo, color) {
 		.addFields(
 			{
 				name: "Price",
-				value: price,
+				value: getFormattedPrice(appInfo),
 				inline: true,
 			},
 			{
