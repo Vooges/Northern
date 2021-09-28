@@ -4,11 +4,11 @@
 
 * Music commands
 * Retrieve Steam game/DLC info
-* Mass message removal
+* Role management
 * Show server info
 * Show new members
 * Show members that left
-* Retrieve steam game/DLC info
+* Ban users
 
 **Installation**
 
