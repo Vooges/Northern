@@ -26,17 +26,20 @@ async function fetchSteamApp(appid) {
 	return res.data[`${appid}`].data;
 }
 
-async function fetchDLCs(appids, msg) {
+async function fetchDLCs(appids) {
 	const names = [];
-	let temp = "";
 
 	for (const appid of appids) {
 		const appDetails = await fetchSteamApp(appid);
 		names.push(appDetails.name);
 
-		await msg.edit(`Retrieved DLC: **${appDetails.name}**`);
+		// Check if the DLC's fit, dirty but it works
+		if (names.join("").length > 800) {
+			const overflowCount = appids.length - names.length;
+			names.push(`not displaying ${overflowCount} more DLC's`);
+			break;
+		}
 	}
-	msg.delete();
 
 	return names;
 }
@@ -66,7 +69,7 @@ function fixHtmlString(value) {
 		.join("-")
 		.slice(0, 1021); //fixes max string length in embed field
 
-	if(text.length == 1021){
+	if (text.length == 1021) {
 		text = text.concat("...");
 	}
 
@@ -78,12 +81,12 @@ function createGameEmbed(appInfo, dlcs, color) {
 
 	var price;
 
-	if(appInfo.is_free){
+	if (appInfo.is_free) {
 		price = "FREE";
 	} else {
 		price = appInfo.price_overview
 			? appInfo.price_overview.final_formatted
-			: "N/A"
+			: "N/A";
 	}
 
 	embed
@@ -109,7 +112,8 @@ function createGameEmbed(appInfo, dlcs, color) {
 			},
 			{
 				name: "DLC",
-				value: //too many dlcs can crash the bot due to the character limit of 1024
+				//too many dlcs can crash the bot due to the character limit of 1024
+				value:
 					dlcs.length !== 0
 						? dlcs.map((d) => `- ${d}`).join("\n")
 						: "N/A",
@@ -153,7 +157,7 @@ function createGameEmbed(appInfo, dlcs, color) {
 				name: "Release date",
 				value: appInfo.release_date.coming_soon
 					? "coming soon"
-					: appInfo.release_date.date,
+					: appInfo.release_date.date || "N/A",
 				inline: true,
 			}
 		)
@@ -167,12 +171,12 @@ function createDLCEmbed(appInfo, color) {
 
 	var price;
 
-	if(appInfo.is_free){
+	if (appInfo.is_free) {
 		price = "FREE";
 	} else {
 		price = appInfo.price_overview
 			? appInfo.price_overview.final_formatted
-			: "N/A"
+			: "N/A";
 	}
 
 	embed
@@ -239,7 +243,7 @@ function createDLCEmbed(appInfo, color) {
 				name: "Release date",
 				value: appInfo.release_date.coming_soon
 					? "coming soon"
-					: appInfo.release_date.date,
+					: appInfo.release_date.date || "N/A",
 				inline: true,
 			}
 		)
@@ -266,36 +270,48 @@ async function steam(message, args, client) {
 		await fetchSteamApplist();
 	}
 
-	let app;
+	let apps;
+
 	if (isNaN(query)) {
 		await msg.edit(`Searching for title **${query}**...`);
 
 		const steamAppNames = steamAppList.map((a) => a.name);
-		const results = fuzzysort.go(query, steamAppNames);
+		const results = fuzzysort.go(query, steamAppNames, {
+			threshold: -50,
+		});
+		const resultNames = results.map((r) => r.target);
 
-		if (results.length !== 0) {
-			const appName = results[0].target;
-			app = steamAppList.find((a) => a.name === appName);
-		}
+		apps = steamAppList.filter((a) => resultNames.includes(a.name));
+		apps.sort((a, b) => {
+			const resultA = results.find((r) => r.target === a.name);
+			const resultB = results.find((r) => r.target === b.name);
+
+			return resultA.score > resultB.score ? -1 : 1;
+		});
 	} else {
-		app = steamAppList.find((a) => a.appid === parseInt(query));
+		apps = steamAppList.filter((a) => a.appid === parseInt(query));
 	}
 
-	if (!app) {
+	if (apps.length === 0) {
 		await msg.edit(`No title found with query: **${query}**`);
 		return;
 	}
 
-	await msg.edit(`Fetching app details...`);
-	
-	const appDetails = await fetchSteamApp(app.appid);
+	let appDetails;
+	for (const app of apps) {
+		await msg.edit(`Fetching app details for title **${app.name}**...`);
+		appDetails = await fetchSteamApp(app.appid);
+
+		if (!!appDetails && appDetails.type === "game") break;
+	}
 
 	if (!appDetails) {
-		await msg.edit(`Error retrieving **${app.name}**`);
+		await msg.edit(`Failed fetching **${query}**`);
 		return;
 	}
 
-	const dlcs = await fetchDLCs(appDetails.dlc || [], msg);
+	await msg.edit("Fetching DLC's...");
+	const dlcs = await fetchDLCs(appDetails.dlc || []);
 
 	const imageBuffer = await getImageBuffer(appDetails.header_image);
 	const colors = await getImageColors(imageBuffer);
@@ -306,18 +322,17 @@ async function steam(message, args, client) {
 
 	const saturatedColors = sortedColors.map((c) => c.saturate(1));
 
-	var embed;
-	
-	switch(appDetails.type){
-		case 'game':
+	let embed;
+	switch (appDetails.type) {
+		case "game":
 			embed = createGameEmbed(appDetails, dlcs, saturatedColors[0].hex());
 			break;
-		case 'dlc':
+		case "dlc":
 			embed = createDLCEmbed(appDetails, saturatedColors[0].hex());
 			break;
 	}
-	
-	message.reply({ embeds: [embed] });
+
+	msg.edit({ embeds: [embed] });
 }
 
 module.exports = new Command({
