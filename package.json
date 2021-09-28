@@ -12,6 +12,8 @@
 		"axios": "^0.21.4",
 		"discord-api-types": "^0.23.1",
 		"discord.js": "^13.1.0",
+		"erela.js": "^2.3.3",
+		"erela.js-spotify": "^1.2.0",
 		"ffmpeg": "^0.0.4",
 		"ffmpeg-static": "^4.4.0",
 		"fuzzysort": "^1.1.4",

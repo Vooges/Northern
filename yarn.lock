@@ -289,6 +289,13 @@
   "resolved" "https://registry.npmjs.org/aws4/-/aws4-1.11.0.tgz"
   "version" "1.11.0"
 
+"axios@^0.20.0":
+  "integrity" "sha512-ANA4rr2BDcmmAQLOKft2fufrtuvlqR+cXNNinUmvfeSNCOF98PZL+7M/v1zIdGo7OLjEA9J2gXJL+j4zGsl0bA=="
+  "resolved" "https://registry.npmjs.org/axios/-/axios-0.20.0.tgz"
+  "version" "0.20.0"
+  dependencies:
+    "follow-redirects" "^1.10.0"
+
 "axios@^0.21.4":
   "integrity" "sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-0.21.4.tgz"
@@ -691,6 +698,23 @@
   "resolved" "https://registry.npmjs.org/env-paths/-/env-paths-2.2.1.tgz"
   "version" "2.2.1"
 
+"erela.js-spotify@^1.2.0":
+  "integrity" "sha512-FbkdVK7OquVzyNVl4aZ3AU6RHRrHzBpORGorK5q+L26y3hB/7ze9mQ7uiOa5PsskskELRWepoluqke3U8edbmQ=="
+  "resolved" "https://registry.npmjs.org/erela.js-spotify/-/erela.js-spotify-1.2.0.tgz"
+  "version" "1.2.0"
+  dependencies:
+    "axios" "^0.20.0"
+    "erela.js" "^2.2.0"
+
+"erela.js@^2.2.0", "erela.js@^2.3.3":
+  "integrity" "sha512-tzowGHLSodZr2j311csFSqm9lwE6plqeULTAwPwuRX9PQbXg4Ohdy/3MTMWrltiFAMSIG/5r9GQtTUt9Mqzhhw=="
+  "resolved" "https://registry.npmjs.org/erela.js/-/erela.js-2.3.3.tgz"
+  "version" "2.3.3"
+  dependencies:
+    "@discordjs/collection" "^0.1.6"
+    "petitio" "^1.1.0"
+    "ws" "^7.3.1"
+
 "es5-ext@^0.10.12", "es5-ext@^0.10.35", "es5-ext@^0.10.46", "es5-ext@^0.10.50", "es5-ext@^0.10.53", "es5-ext@~0.10.14", "es5-ext@~0.10.2", "es5-ext@~0.10.46":
   "integrity" "sha512-Xs2Stw6NiNHWypzRTY1MtaG/uJlwCk8kH81920ma8mvN8Xq1gsfhZvpkImLQArw8AHnv8MT2I45J3c0R8slE+Q=="
   "resolved" "https://registry.npmjs.org/es5-ext/-/es5-ext-0.10.53.tgz"
@@ -784,7 +808,7 @@
   dependencies:
     "when" ">= 0.0.1"
 
-"follow-redirects@^1.14.0":
+"follow-redirects@^1.10.0", "follow-redirects@^1.14.0":
   "integrity" "sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.4.tgz"
   "version" "1.14.4"
@@ -1479,6 +1503,11 @@
   "resolved" "https://registry.npmjs.org/performance-now/-/performance-now-2.1.0.tgz"
   "version" "2.1.0"
 
+"petitio@^1.1.0":
+  "integrity" "sha512-hbbT+rOvovz39ZneGW+C8B4YsKH20KLXYVDT/IzSUxaY8H7al/TO+vFCm+H5cnYe62gIqF9ak5p8OJktV/I0Ig=="
+  "resolved" "https://registry.npmjs.org/petitio/-/petitio-1.3.2.tgz"
+  "version" "1.3.2"
+
 "pify@^5.0.0":
   "integrity" "sha512-eW/gHNMlxdSP6dmG6uJip6FXN0EQBwm2clYYd8Wul42Cwu/DK8HEftzsapcNdYe2MfLiIwZqsDk2RDEsTE79hA=="
   "resolved" "https://registry.npmjs.org/pify/-/pify-5.0.0.tgz"
@@ -1851,7 +1880,7 @@
   "resolved" "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
   "version" "1.0.2"
 
-"ws@^7.4.4", "ws@^7.5.1":
+"ws@^7.3.1", "ws@^7.4.4", "ws@^7.5.1":
   "integrity" "sha512-BAkMFcAzl8as1G/hArkxOxq3G7pjUqQ3gzYbLL0/5zNkph70e+lCoxBGnm6AW1+/aiNeV4fnKqZ8m4GZewmH2w=="
   "resolved" "https://registry.npmjs.org/ws/-/ws-7.5.5.tgz"
   "version" "7.5.5"
