@@ -2,7 +2,7 @@ const Event = require("../Structures/Event.js");
 
 const Discord = require("discord.js");
 
-module.exports= new Event("guildMemberRemove", (client, member) => {
+module.exports = new Event("guildMemberRemove", (client, member) => {
     const channel = member.guild.channels.cache.find(c => c.name == "welcome-and-goodbye");
 
     if(!channel) return;

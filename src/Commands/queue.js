@@ -1,50 +1,70 @@
-const { getVoiceConnection } = require("@discordjs/voice");
+const config = require("../Data/config.json");
+
 const Command = require("../Structures/Command.js");
 const Discord = require("discord.js");
 
-function createField(queue){
-    var songs = [];
+function createFields(queue) {
+	let songs = [];
 
-    queue.forEach(function callback(value, index) {
-        if(index !== 0){
-            songs.push({
-                name: `${index}: ${value.title}`,
-                value: `url: ${value.url}`,
-            });
-        }
-    });
+	if (queue.length === 0) {
+		return [
+			{
+				name: "Queue is empty",
+				value: `Use ${config.prefix}play or ${config.prefix}p to add a song to the queue`,
+			},
+		];
+	}
 
-    return songs;
+	let index = 0;
+	for (const song of queue) {
+		if (song.requester) {
+			const { username, discriminator } = song.requester;
+
+			songs.push({
+				name: `${index + 1}. ${song.title}`,
+				value: `Requested by ${username}#${discriminator}`,
+			});
+		} else {
+			songs.push({
+				name: `${index + 1}. ${song.title}`,
+				value: `by ${song.author}`,
+			});
+		}
+
+		index++;
+	}
+
+	return songs;
 }
 
-function createEmbed(message, queue){
-    const embed = new Discord.MessageEmbed();
+function createEmbed(message, queue) {
+	const embed = new Discord.MessageEmbed();
 
-    embed.setTitle(`${message.guild.name} queue`)
-        .setColor("YELLOW")
-        .setDescription(
-            "Songs in queue:"
-        )
-        .addFields(createField(queue));
+	embed
+		.setTitle(`${message.guild.name} queue`)
+		.setColor("YELLOW")
+		.setDescription("Songs in queue:")
+		.addFields(createFields(queue));
 
-    return message.reply({embeds: [embed]});
+	return message.reply({ embeds: [embed] });
+}
+
+async function queue(message, args, client) {
+	const player = client.manager.get(message.guild.id);
+    
+	if (!player) {
+		return await message.reply("Not playing anything");
+	}
+
+	createEmbed(message, player.queue);
 }
 
 module.exports = new Command({
 	name: "queue",
-    aliases: [],
+	aliases: [],
 	description: "Gets the server queue",
 	permission: "SEND_MESSAGES",
 	async run(message, args, client) {
-		const connection = getVoiceConnection(message.member.guild.id);
-
-		if(!connection)
-            return message.reply('Unable to display queue');
-
-        //TODO: check if bot is in same channel as user
-
-        queue = client.queue.get(message.member.guild.id);
-
-        createEmbed(message, queue);
-	}
+		queue(message, args, client);
+	},
 });
