@@ -3,9 +3,6 @@ const Discord = require("discord.js");
 
 const config = require("../Data/config.json");
 
-/**
- * @param {Discord.MessageEmbed} embed 
- */
 function getCommands(message, args, client){
     //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
     const fs = require("fs");
@@ -17,18 +14,16 @@ function getCommands(message, args, client){
         .forEach(file => {
             const command = require(`../Commands/${file}`);
 
-            let name = `${config.prefix}${command.name}`;
+            var name = `${command.name}`;
 
-            if(command.aliases[0] !== null)
-                name += `, aliases: `
-                command.aliases.forEach(alias => {
-                    name += `${config.prefix}${alias} `;
-                });
+            if(command.aliases.length > 0){
+                name = name.concat(`, aliases: ${command.aliases.join(", ")}`);
+            }
 
             commands.push({
                 name: name,
                 value: command.description,
-                inline: false,
+                inline: true,
             });
         }
     );
@@ -41,9 +36,7 @@ function createEmbed(message, args, client){
     embed.setTitle("Apollo")
         .setColor("BLURPLE")
         .setThumbnail(client.user.avatarURL({dynamic: true}))
-        .setDescription(
-            "Available commands:"
-        )
+        .setDescription(`Prefix: ${config.prefix} | Available commands:`)
         .addFields(getCommands(message, args, client));
 
     message.reply({embeds: [embed]});

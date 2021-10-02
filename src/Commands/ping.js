@@ -1,6 +1,6 @@
 const Command = require("../Structures/Command.js");
 
-async function measurePing(message, args, client){
+async function measurePing(message, args, client) {
 	const msg = await message.reply(`Ping: ${client.ws.ping} ms.`);
 
 	msg.edit(
@@ -17,5 +17,5 @@ module.exports = new Command({
 	permission: "SEND_MESSAGES",
 	run(message, args, client) {
 		measurePing(message, args, client);
-	}
+	},
 });

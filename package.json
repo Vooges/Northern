@@ -14,13 +14,9 @@
 		"discord.js": "^13.1.0",
 		"erela.js": "^2.3.3",
 		"erela.js-spotify": "^1.2.0",
-		"ffmpeg": "^0.0.4",
-		"ffmpeg-static": "^4.4.0",
 		"fuzzysort": "^1.1.4",
 		"get-image-colors": "^4.0.0",
 		"html-to-text": "^8.0.0",
-		"libsodium-wrappers": "^0.7.9",
-		"yt-search": "^2.10.1",
-		"ytdl-core": "^4.9.1"
+		"libsodium-wrappers": "^0.7.9"
 	}
 }

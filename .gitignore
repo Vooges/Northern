@@ -119,3 +119,9 @@ dist
 
 # Config file
 src/Data/config.json
+
+# Lavalink
+Lavalink.jar
+
+# Application
+application.yml
