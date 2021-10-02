@@ -38,9 +38,7 @@ function createFields(queue) {
 }
 
 function createEmbed(message, queue) {
-	const embed = new Discord.MessageEmbed();
-
-	embed
+	const embed = new Discord.MessageEmbed()
 		.setTitle(`${message.guild.name} queue`)
 		.setColor("YELLOW")
 		.setDescription("Songs in queue:")

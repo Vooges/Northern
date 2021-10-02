@@ -14,7 +14,7 @@ async function play(message, args, client) {
 
 	const res = await client.manager.search(query, message.author);
 
-    if(!message.member.voice.channel) {
+	if(!message.member.voice.channel) {
         return await message.reply("You have to be in a voice channel to use this command!");
     }
 
@@ -28,8 +28,23 @@ async function play(message, args, client) {
 	player.connect();
 
 	// Adds the first track to the queue.
-	player.queue.add(res.tracks[0]);
-	message.channel.send(`Enqueuing track **${res.tracks[0].title}**.`);
+	if(res.loadType === "SEARCH_RESULT" || res.loadType === "TRACK_LOADED"){
+		player.queue.add(res.tracks[0]);
+
+		message.reply(`Enqueuing track **${res.tracks[0].title}**.`);
+	} else if(res.loadType === "PLAYLIST_LOADED"){
+		res.tracks.forEach(track => {
+			player.queue.add(track);
+		});
+
+		message.reply(`Enqueuing playlist:  **${res.playlist.name}**.`);
+	} else if(res.loadType === "NO_MATCHES"){
+		message.reply("No tracks found");
+		return;
+	} else if (res.loadType === "LOAD_FAILED"){
+		message.reply("Something went wrong");
+		return;
+	}
 
 	// Plays the player (plays the first track in the queue).
 	// The if statement is needed else it will play the current track again
@@ -38,11 +53,7 @@ async function play(message, args, client) {
 	}
 
 	// For playlists you'll have to use slightly different if statement
-	if (
-		!player.playing &&
-		!player.paused &&
-		player.queue.totalSize === res.tracks.length
-	) {
+	if (!player.playing && !player.paused && player.queue.totalSize === res.tracks.length){
 		player.play();
 	}
 }

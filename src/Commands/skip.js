@@ -9,16 +9,23 @@ async function skip(message, args, client) {
 		return await message.reply("Not playing anything");
 	}
 
-	const amount = parseInt(args[0]) || 1;
-	console.log(amount);
+	const amount = parseInt(args[0]);
+
+	if(!amount){
+		player.stop;
+
+		return message.reply(`Skipped song: ${player.queue.get(0)}`);
+	}
+
 	const songs = player.queue.remove(-1, amount - 1);
 
 	if (songs.length !== 0) {
 		const songNames = songs.map((s) => `- ${s.title}\n`);
-		await message.reply(`Skipped songs:\n ${songNames}`);
-	} else {
-		return await message.reply("Nothing to skip");
+		
+		return await message.reply(`Skipped songs:\n ${songNames}`);
 	}
+		
+	return await message.reply("Nothing to skip");
 }
 
 module.exports = new Command({
