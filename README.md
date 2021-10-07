@@ -1,7 +1,10 @@
 # Apollo
 
-* Apollo is a multi-purpose bot written in JavaScript
-* Apollo is using discord.js 13
+### Built with
+
+* [Node.js](https://nodejs.org/en/) - a JavaScript runtime environment
+* [NPM](https://www.npmjs.com/) - a Node package manager
+* [discord.js v13](https://discord.js.org/#/)
 
 ### Features
 
