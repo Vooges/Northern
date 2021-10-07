@@ -41,7 +41,7 @@ async function play(message, args, client) {
 	} else if(res.loadType === "NO_MATCHES"){
 		message.reply("No tracks found");
 		return;
-	} else if (res.loadType === "LOAD_FAILED"){
+	} else if (res.loadType === "LOAD_FAILED"){ //TODO: youtube playlists fail with this error
 		message.reply("Something went wrong");
 		return;
 	}

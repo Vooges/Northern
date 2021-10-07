@@ -4,29 +4,25 @@ const Discord = require("discord.js");
 
 const config = require("../Data/config.json");
 
-function msToHMS(ms) {
-	const hours = Math.floor((ms  / 1000 / 3600 ) % 24);
-	const minutes = Math.floor((ms / 1000 / 60) % 60);
-	const seconds = Math.floor((ms / 1000) % 60);
+function msToHMS(duration){
+	let hours = Math.floor((duration  / 1000 / 3600 ) % 24);
+	let minutes = Math.floor((duration / 1000 / 60) % 60);
+	let seconds = Math.floor((duration / 1000) % 60);
 
-	if(!hours){
-		return [
-			minutes.toString(),
-			seconds.toString(),
-		].join(":");
+	minutes = String(minutes).padStart(2, '0');
+	seconds = String(seconds).padStart(2, '0');
+  	
+	if(hours === 0){
+		return [minutes, seconds].join(":");
 	}
-  
-	return [
-		hours.toString(),
-		minutes.toString(),
-		seconds.toString(),
-	].join(':');
+
+  	return [hours, minutes, seconds].join(":");
 }
 
 function showCurrentTrack(track){
 	return new Discord.MessageEmbed()
         .setTitle(`Now playing:`)
-        .setColor("BLUE")
+        .setColor("AQUA")
         .setThumbnail(track.thumbnail)
         .setDescription(`${track.title}`)
         .addFields({

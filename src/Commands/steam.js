@@ -77,8 +77,6 @@ function fixHtmlString(value) {
 }
 
 function createGameEmbed(appInfo, dlcs, color) {
-	const embed = new Discord.MessageEmbed();
-
 	var price;
 
 	if (appInfo.is_free) {
@@ -89,7 +87,7 @@ function createGameEmbed(appInfo, dlcs, color) {
 			: "N/A";
 	}
 
-	embed
+	return new Discord.MessageEmbed()
 		.setTitle(appInfo.name)
 		.setColor(color)
 		.setThumbnail(appInfo.header_image)
@@ -112,7 +110,6 @@ function createGameEmbed(appInfo, dlcs, color) {
 			},
 			{
 				name: "DLC",
-				//too many dlcs can crash the bot due to the character limit of 1024
 				value:
 					dlcs.length !== 0
 						? dlcs.map((d) => `- ${d}`).join("\n")
@@ -162,13 +159,9 @@ function createGameEmbed(appInfo, dlcs, color) {
 			}
 		)
 		.setFooter("Price can only be retrieved in euros as of now.");
-
-	return embed;
 }
 
 function createDLCEmbed(appInfo, color) {
-	
-
 	var price;
 
 	if (appInfo.is_free) {
@@ -179,7 +172,7 @@ function createDLCEmbed(appInfo, color) {
 			: "N/A";
 	}
 
-	const embed = new Discord.MessageEmbed()
+	return new Discord.MessageEmbed()
 		.setTitle(appInfo.name)
 		.setColor(color)
 		.setThumbnail(appInfo.header_image)
@@ -248,8 +241,6 @@ function createDLCEmbed(appInfo, color) {
 			}
 		)
 		.setFooter("Price can only be retrieved in euros as of now.");
-
-	return embed;
 }
 
 async function steam(message, args, client) {
@@ -332,7 +323,8 @@ async function steam(message, args, client) {
 			break;
 	}
 
-	msg.edit({ embeds: [embed] });
+	msg.delete(); // removes the old message so that it won't show "Fetching DLC's..."
+	message.reply({ embeds: [embed] });
 }
 
 module.exports = new Command({

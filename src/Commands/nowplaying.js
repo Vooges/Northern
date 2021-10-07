@@ -16,10 +16,10 @@ function msToHMS(duration){
   	return [hours, minutes, seconds].join(":");
 }
 
-function showCurrentTrack(track, skipper){
+function showCurrentTrack(track){
 	return new Discord.MessageEmbed()
-        .setTitle(`Skipped:`)
-        .setColor("DARK_RED")
+        .setTitle(`Current song: ${track.title}`)
+        .setColor("AQUA")
         .setThumbnail(track.thumbnail)
         .setDescription(`${track.title}`)
         .addFields({
@@ -27,7 +27,7 @@ function showCurrentTrack(track, skipper){
             value: msToHMS(track.duration),
             inline: true
         })
-		.setFooter(`Skipped by: ${skipper.tag}`, skipper.displayAvatarURL());
+		.setFooter(`Requested by: ${track.requester.username}#${track.requester.discriminator}`, skipper.displayAvatarURL());
 }
 
 async function skip(message, args, client) {
@@ -45,11 +45,7 @@ async function skip(message, args, client) {
 
 	const currentTrack = player.queue.current;
 
-	const skipper = message.member.user;
-
-	player.stop();
-
-	message.reply({embeds: [showCurrentTrack(currentTrack, skipper)]});
+	message.reply({embeds: [showCurrentTrack(currentTrack)]});
 }
 
 module.exports = new Command({
