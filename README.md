@@ -1,19 +1,18 @@
 # Apollo
 
+### Features
+
+* Music commands
+* Retrieve Steam game/DLC info
+* Server management
+* Show server info
+* Random number generator
+
 ### Built with
 
 * [Node.js](https://nodejs.org/en/) - a JavaScript runtime environment
 * [NPM](https://www.npmjs.com/) - a Node package manager
 * [discord.js v13](https://discord.js.org/#/)
-
-### Features
-
-* Music commands
-* Retrieve Steam game/DLC info
-* Role management
-* Show server info
-* Server management
-* Random number generator
 
 ### Installation
 
