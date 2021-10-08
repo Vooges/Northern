@@ -31,4 +31,4 @@ Or manually run each command
 * Run `java -jar lavalink.jar`
 * Run `node .`
 
-_Note: running `node .` before running `java -jar lavalink.jar` will cause the bot to fail_
+_Note: running `node .` before Lavalink finished booting up will cause the bot to fail_
