@@ -16,7 +16,7 @@ async function createEmbed(message, args, client){
             defaultMessageNotifications: message.guild.defaultMessageNotifications,
             premiumTier: message.guild.premiumTier,
             serverOwner: owner.user.tag,
-            afkChannel: message.guild.afkChannel.name,
+            afkChannel: message.guild.afkChannel,
             verified: message.guild.verified,
             createdAt: message.guild.createdAt.toUTCString(),
         }
@@ -53,7 +53,9 @@ async function createEmbed(message, args, client){
                 inline: false
             }, {
                 name: "AFK channel",
-                value: serverInformation.afkChannel || "N/A",
+                value: serverInformation.afkChannel
+                        ?serverInformation.afkChannel.name 
+                        : "N/A",
                 inline: false
             })
             .setFooter(`Server created at ${serverInformation.createdAt}`);

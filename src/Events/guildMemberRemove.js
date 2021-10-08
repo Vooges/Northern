@@ -3,13 +3,12 @@ const Event = require("../Structures/Event.js");
 const Discord = require("discord.js");
 
 module.exports = new Event("guildMemberRemove", (client, member) => {
-    const channel = member.guild.channels.cache.find(c => c.name == "welcome-and-goodbye");
+    const channel = member.guild.systemChannel;
 
     if(!channel) return;
 
-    const embed = new Discord.MessageEmbed();
-
-    embed.setTitle("Member left")
+    const embed = new Discord.MessageEmbed()
+        .setTitle("Member left")
         .setColor("RED")
         .setAuthor(member.user.tag)
         .setThumbnail(member.user.avatarURL({dynamic: true}))

@@ -1,9 +1,8 @@
 const Command = require("../Structures/Command.js");
 const Discord = require("discord.js");
 
-/**
- * @param {Discord.MessageEmbed} embed 
- */
+const config = require("../Data/config.json");
+
 function getCommands(message, args, client){
     //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
     const fs = require("fs");
@@ -13,43 +12,31 @@ function getCommands(message, args, client){
     fs.readdirSync('./src/Commands')
         .filter(file => file.endsWith(".js"))
         .forEach(file => {
-            /**
-             * @type {Command}
-             */
             const command = require(`../Commands/${file}`);
 
+            var name = `${command.name}`;
+
+            if(command.aliases.length > 0){
+                name = name.concat(`, aliases: ${command.aliases.join(", ")}`);
+            }
+
             commands.push({
-                name: client.prefix + command.name,
+                name: name,
                 value: command.description,
-                inline: false,
+                inline: true,
             });
         }
     );
-
-    commands.push({
-        name: client.prefix + "skip",
-        value: 'Skips the current song',
-        inline: false,
-    });
-
     return commands; 
 }
 
-/**
- * @param message
- * @param args
- * @param client
- */
 function createEmbed(message, args, client){
-    //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
     const embed = new Discord.MessageEmbed();
 
-    embed.setTitle("Apollo")
+    embed.setTitle("Northern")
         .setColor("BLURPLE")
         .setThumbnail(client.user.avatarURL({dynamic: true}))
-        .setDescription(
-            "Available commands:"
-        )
+        .setDescription(`Prefix: ${config.prefix} | Available commands:`)
         .addFields(getCommands(message, args, client));
 
     message.reply({embeds: [embed]});
@@ -61,7 +48,6 @@ module.exports = new Command({
     description: "Shows the available commands",
     permission: "SEND_MESSAGES",
     async run(message, args, client){
-        //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
         createEmbed(message, args, client); 
     }
 });

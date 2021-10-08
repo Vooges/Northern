@@ -10,9 +10,9 @@ async function clearMessages(message, args, client){
         const amountParsed = parseInt(amount);
 
         if(amountParsed > 100) 
-            return message.reply("You cannot clear more than 100 messages");
+            return message.reply("You cannot clear more than 100 messages at a time");
 
-        message.channel.bulkDelete(amountParsed);
+        await message.channel.bulkDelete(amountParsed);
 
         const msg = await message.channel.send(`Cleared ${amountParsed} messages!`);
 
@@ -27,7 +27,7 @@ async function clearMessages(message, args, client){
 module.exports = new Command({
 	name: "clear",
     aliases: [],
-	description: "Clear an amount of messages",
+	description: "Mass clear messages",
 	permission: "MANAGE_MESSAGES",
 	run(message, args, client) {
 		clearMessages(message, args, client);

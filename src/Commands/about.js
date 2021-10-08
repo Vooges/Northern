@@ -3,10 +3,9 @@ const Discord = require("discord.js");
 const pjson = require("../../package.json");
 
 async function createEmbed(message, args, client){
-    const embed = new Discord.MessageEmbed();
-
-    embed.setTitle("Apollo")
-        .setColor("BLUE")
+    const embed = new Discord.MessageEmbed()
+        .setTitle("Northern")
+        .setColor("WHITE")
         .setThumbnail(client.user.avatarURL({dynamic: true}))
         .setDescription(
             "Multi-purpose bot"
