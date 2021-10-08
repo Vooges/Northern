@@ -1,5 +1,7 @@
 # Northern
 
+![Northern logo](src/Logos/logo.jpg)
+
 ### Features
 
 * Music commands
