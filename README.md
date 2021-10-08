@@ -1,4 +1,4 @@
-# Turbo
+# Northern
 
 ### Features
 
@@ -23,6 +23,10 @@
 * Follow the [configuration steps](https://github.com/freyacodes/Lavalink) for Lavalink
 
 ### Running the bot
+
+* Run the `start.bat` file
+
+Or manually run each command
 
 * Run `java -jar lavalink.jar`
 * Run `node .`
