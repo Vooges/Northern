@@ -33,7 +33,7 @@ function getCommands(message, args, client){
 function createEmbed(message, args, client){
     const embed = new Discord.MessageEmbed();
 
-    embed.setTitle("Apollo")
+    embed.setTitle("Northern")
         .setColor("BLURPLE")
         .setThumbnail(client.user.avatarURL({dynamic: true}))
         .setDescription(`Prefix: ${config.prefix} | Available commands:`)

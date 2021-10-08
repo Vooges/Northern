@@ -38,7 +38,7 @@ function removeSongFromQueue(message, args, client){
 
 module.exports = new Command({
 	name: "remove",
-	aliases: [],
+	aliases: ['r'],
 	description: "Removes the specified song from the queue",
 	permission: "SEND_MESSAGES",
 	async run(message, args, client) {
