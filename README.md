@@ -34,3 +34,17 @@ Or manually run each command
 * Run `node .`
 
 _Note: running `node .` before Lavalink finished booting up will cause the bot to fail_
+
+### Troubleshooting
+
+__Bot shows 'No available nodes' after running start.bat__
+##### _Note: closing both command prompt windows and running `start.bat` again sometimes works_
+
+Method 1:
+
+* Run `java -jar lavalink.jar`
+* Wait for lavalink to finish initializing
+* Run `node .`
+
+Method 2: 
+* Change `timeout /t 10 /nobreak` in `start.bat` to a greater amount of seconds, e.g. `timeout /t 15 /nobreak`
