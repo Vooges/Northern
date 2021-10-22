@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const HtmlToText = require("html-to-text");
 
+require('dotenv').config();
+
 const axios = require("axios").default;
 const fuzzysort = require("fuzzysort");
 const getColors = require("get-image-colors");
@@ -251,7 +253,7 @@ async function steam(message, args, client) {
 
 	if (!query) {
 		await msg.edit(
-			`Correct usage: ${config.prefix}steam **App Title** or **Id**`
+			`Correct usage: ${process.env.prefix}steam **App Title** or **Id**`
 		);
 		return;
 	}

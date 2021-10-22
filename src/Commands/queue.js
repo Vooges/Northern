@@ -1,4 +1,4 @@
-const config = require("../Data/config.json");
+require('dotenv').config();
 
 const Command = require("../Structures/Command.js");
 const Discord = require("discord.js");
@@ -10,7 +10,7 @@ function createFields(queue, beginIndex) {
 		return [
 			{
 				name: "Queue is empty",
-				value: `Use ${config.prefix}play or ${config.prefix}p to add a song to the queue`,
+				value: `Use ${process.env.prefix}play or ${process.env.prefix}p to add a song to the queue`,
 			},
 		];
 	}
@@ -69,23 +69,29 @@ async function paginator(message, queue, currentTrack, page) {
 	const collector = queueMessage.createReactionCollector(filter);
 
 	collector.on('collect', (reaction, user) => {
-		if(reaction.emoji.name === '➡️'){
+		if(reaction.emoji.name === '➡️' && user.id !== message.author.id){
 			if(page < maxPage){
 				page++;
 				const minSlice = (page * 10) - 10;
 				const maxSlice = (page * 10);
 
 				const slicedQueue = queue.slice(minSlice, maxSlice);
-				queueMessage.edit({ embeds: [createEmbed(message, slicedQueue, currentTrack, page, maxPage)] });
+
+				let newMaxPage = Math.ceil(slicedQueue.length / 10) || 1;
+
+				queueMessage.edit({ embeds: [createEmbed(message, slicedQueue, currentTrack, page, newMaxPage)] });
 			}
-		} else if(reaction.emoji.name === '⬅️'){
+		} else if(reaction.emoji.name === '⬅️' && user.id !== message.author.id){
 			if(page > 1){
 				page--;
 				const minSlice = (page * 10) - 10;
 				const maxSlice = (page * 10);
 
 				const slicedQueue = queue.slice(minSlice, maxSlice);
-				queueMessage.edit({ embeds: [createEmbed(message, slicedQueue, currentTrack, page, maxPage)] });
+
+				let newMaxPage = Math.ceil(slicedQueue.length / 10) || 1;
+
+				queueMessage.edit({ embeds: [createEmbed(message, slicedQueue, currentTrack, page, newMaxPage)] });
 			}
 		}
 	});

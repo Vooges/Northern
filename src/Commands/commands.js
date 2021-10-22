@@ -1,7 +1,7 @@
 const Command = require("../Structures/Command.js");
 const Discord = require("discord.js");
 
-const config = require("../Data/config.json");
+require('dotenv').config();
 
 function getCommands(message, args, client){
     //TODO: rewrite to send 1 message for every 25 commands due to discord embed field limitations
@@ -14,7 +14,7 @@ function getCommands(message, args, client){
         .forEach(file => {
             const command = require(`../Commands/${file}`);
 
-            var name = `${command.name}`;
+            let name = `${command.name}`;
 
             if(command.aliases.length > 0){
                 name = name.concat(`, aliases: ${command.aliases.join(", ")}`);
@@ -30,13 +30,12 @@ function getCommands(message, args, client){
     return commands; 
 }
 
-function createEmbed(message, args, client){
-    const embed = new Discord.MessageEmbed();
-
-    embed.setTitle("Northern")
+async function createEmbed(message, args, client){
+    const embed = new Discord.MessageEmbed()
+        .setTitle("Northern")
         .setColor("BLURPLE")
         .setThumbnail(client.user.avatarURL({dynamic: true}))
-        .setDescription(`Prefix: ${config.prefix} | Available commands:`)
+        .setDescription(`Prefix: ${process.env.prefix} | Available commands:`)
         .addFields(getCommands(message, args, client));
 
     message.reply({embeds: [embed]});

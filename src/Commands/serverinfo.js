@@ -4,29 +4,12 @@ const pjson = require("../../package.json");
 
 async function createEmbed(message, args, client){
     try{
-        const embed = new Discord.MessageEmbed();
+        const serverInformation = message.guild;
 
-        const owner = await message.guild.fetchOwner()
-
-        const serverInformation = {
-            name: message.guild.name,
-            icon: message.guild.icon,
-            verificationLevel: message.guild.verificationLevel,
-            memberCount: message.guild.memberCount,
-            defaultMessageNotifications: message.guild.defaultMessageNotifications,
-            premiumTier: message.guild.premiumTier,
-            serverOwner: owner.user.tag,
-            afkChannel: message.guild.afkChannel,
-            verified: message.guild.verified,
-            createdAt: message.guild.createdAt.toUTCString(),
-        }
-
-        embed.setTitle(serverInformation.name)
+        const embed = new Discord.MessageEmbed()
+            .setTitle(serverInformation.name)
             .setColor("GREYPLE")
             .setThumbnail(message.guild.iconURL({dynamic: true}))
-            .setDescription(
-                "General server information"
-            )
             .addFields({
                 name: "Verified",
                 value: serverInformation.verified || "False",

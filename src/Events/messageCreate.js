@@ -1,6 +1,6 @@
 const Event = require("../Structures/Event.js");
 
-const config = require("../Data/config.json");
+require('dotenv').config();
 
 function runUtilities(message, args, client){
 	if(message.content.includes("discord.gg/")){
@@ -26,7 +26,7 @@ module.exports = new Event("messageCreate", (client, message) => {
 	const command = client.commands.find(cmd => cmd.name == args[0]) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(args[0]));
 
 	if (!command) 
-		return message.reply(`${args[0]} is not a valid command! \nUse \`${config.prefix}commands\` to see all available commands.`);
+		return message.reply(`${args[0]} is not a valid command! \nUse \`${process.env.prefix}commands\` to see all available commands.`);
 
 	const permission = message.member.permissions.has(command.permission, true);
 

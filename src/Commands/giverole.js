@@ -1,5 +1,6 @@
 const Command = require("../Structures/Command");
-const config = require("../Data/config.json");
+
+require('dotenv').config();
 
 function getUserFromMention(client, mention) {
 	if (!mention) return;
@@ -21,12 +22,12 @@ async function addRoleToUser(message, args, client){
         const user = getUserFromMention(client, args[1]);
 
         if(!user)
-            return message.reply(`No user specified. Correct usage: \`${config.prefix}giverole @username role\``);
+            return message.reply(`No user specified. Correct usage: \`${process.env.prefix}giverole @username role\``);
 
         const roleName = args[2];
 
         if(!roleName)
-            return message.reply(`No role specified. Correct usage: \`${config.prefix}giverole @username role\``);
+            return message.reply(`No role specified. Correct usage: \`${process.env.prefix}giverole @username role\``);
 
         const role = message.guild.roles.cache.find(role => role.name === args[2]);
 

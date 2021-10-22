@@ -20,7 +20,7 @@ function showCurrentTrack(track){
 	return new Discord.MessageEmbed()
         .setTitle(`Current song: ${track.title}`)
         .setColor("AQUA")
-        .setThumbnail(track.thumbnail)
+        .setThumbnail(track.thumbnail || client.user.avatarURL({dynamic: true}))
         .setDescription(`${track.title}`)
         .addFields({
             name: "Duration",
