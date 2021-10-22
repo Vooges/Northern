@@ -1,4 +1,5 @@
-const config = require("../Data/config.json");
+require('dotenv').config();
+
 const Command = require("../Structures/Command.js");
 
 async function play(message, args, client) {
@@ -8,7 +9,7 @@ async function play(message, args, client) {
 
 	if (!query) {
 		return await message.reply(
-			`Correct usage: ${config.prefix}play or ${config.prefix}p **Song Name or URL**`
+			`Correct usage: ${process.env.prefix}play or ${process.env.prefix}p **Song Name or URL**`
 		);
 	}
 
@@ -41,7 +42,7 @@ async function play(message, args, client) {
 	} else if(res.loadType === "NO_MATCHES"){
 		message.reply("No tracks found");
 		return;
-	} else if (res.loadType === "LOAD_FAILED"){ //TODO: youtube playlists fail with this error
+	} else if (res.loadType === "LOAD_FAILED"){ //TODO: some youtube playlists fail with this error
 		message.reply("Something went wrong");
 		return;
 	}

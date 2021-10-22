@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-const config = require("../Data/config.json");
+require('dotenv').config();
 const intents = new Discord.Intents(32767);
 
 class Client extends Discord.Client {
@@ -13,8 +13,8 @@ class Client extends Discord.Client {
 		});
 
 		this.commands = new Discord.Collection();
-		this.prefix = config.prefix;
-		this.token = config.token;
+		this.prefix = process.env.prefix;
+		this.token = process.env.token;
 	}
 
 	start() {

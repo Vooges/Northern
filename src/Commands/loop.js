@@ -1,6 +1,6 @@
 const Command = require("../Structures/Command.js");
 
-const config = require("../Data/config.json");
+require('dotenv').config();
 
 function loop(message, args, client){
     const player = client.manager.players.get(message.member.guild.id)
@@ -8,19 +8,23 @@ function loop(message, args, client){
     if(!player)
         return message.reply('Unable to loop since I\'m not in a voice channel');
 
-    return message.reply("This feature has not been implemented yet");
-
     if(args[1] === "queue"){
         player.setQueueRepeat(!player.queueRepeat);
 
-        return message.reply(`Set repeat queue to ${player.queueRepeat}`);
+        if(player.queueRepeat)
+            return message.reply("Repeating the queue");
+
+        return message.reply("Stopped repeating the queue");
     } else if(args[1] === "song"){
         player.setTrackRepeat(!player.trackRepeat);
 
-        return message.reply(`Set repeat song to ${player.trackRepeat}`);
+        if(player.trackRepeat)
+            return message.reply("Repeating the song");
+
+        return message.reply("Stopped repeating the song");
     }
     
-    return message.reply(`Proper usage: \`${config.prefix}loop song\` or \`${config.prefix}loop queue\``);
+    return message.reply(`Proper usage: \`${process.env.prefix}loop song\` or \`${process.env.prefix}loop queue\``);
 }
 
 module.exports = new Command({

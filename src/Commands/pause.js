@@ -8,7 +8,10 @@ function pausePlayer(message, args, client){
     
     player.pause(!player.paused);
 
-    return message.reply(`Set player paused to ${player.paused}`);
+    if(player.paused)
+        return message.reply("Paused the player");
+
+    return message.reply("Unpaused the player");
 }
 
 module.exports = new Command({

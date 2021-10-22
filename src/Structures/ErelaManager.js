@@ -2,7 +2,7 @@ const { Manager } = require("erela.js");
 const Spotify = require("erela.js-spotify");
 const Discord = require("discord.js");
 
-const config = require("../Data/config.json");
+require('dotenv').config();
 
 function msToHMS(duration){
 	let hours = Math.floor((duration  / 1000 / 3600 ) % 24);
@@ -43,21 +43,21 @@ class ErelaManager extends Manager {
 		super({
 			plugins: [
 				new Spotify({
-					clientID: config.spotify.clientId,
-					clientSecret: config.spotify.clientSecret,
+					clientID: process.env.spotify_clientId,
+					clientSecret: process.env.spotify_clientSecret,
 				})
 			],
 			nodes: [{
-				host: config.erela.host,
-				password: config.erela.password,
-				port: config.erela.port,
+				host: process.env.erela_host,
+				password: process.env.erela_password,
+				port: parseInt(process.env.erela_port),
 			}],
 			send(id, payload) {
 				const guild = client.guilds.cache.get(id);
 				if (guild) guild.shard.send(payload);
 			},
 		})
-		.on("trackStart", (player, track) => { //gets called twice on first song
+		.on("trackStart", (player, track) => { //sometimes gets called twice on first song since booting
 			clearTimeout(timeout);
 
 			client.channels.cache
@@ -67,12 +67,22 @@ class ErelaManager extends Manager {
 		.on("queueEnd", (player) => {
 			client.channels.cache
 				.get(player.textChannel)
-			  	.send("Queue has ended. Leaving the voice channel in 10 seconds.");
+			  	.send("Queue has ended. Leaving the voice channel in 30 seconds.");
 		
 			timeout = setTimeout(function() {
 				player.destroy();
-			}, 10000);
-		  });
+			}, 30000);
+		  })
+		.on("trackStuck", (player, track) => {
+			client.channels.cache
+			  	.get(player.textChannel)
+			  	.send(`Something broke while playing ${track.title}`);
+		})
+		.on("trackError", (player, track) => {
+			client.channels.cache
+			  	.get(player.textChannel)
+			  	.send(`Something broke while playing ${track.title}`);
+		});
 	}
 }
 

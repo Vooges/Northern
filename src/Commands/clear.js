@@ -27,7 +27,7 @@ async function clearMessages(message, args, client){
 module.exports = new Command({
 	name: "clear",
     aliases: [],
-	description: "Mass clear messages",
+	description: "Clear up to 100 messages at a time",
 	permission: "MANAGE_MESSAGES",
 	run(message, args, client) {
 		clearMessages(message, args, client);
