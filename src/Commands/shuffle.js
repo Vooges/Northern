@@ -1,14 +1,14 @@
-const Command = require("../Structures/Command.js");
+const Command = require("../Structures/Command.js")
 
 function pausePlayer(message, args, client){
     const player = client.manager.players.get(message.member.guild.id)
 
     if(!player)
-        return message.reply('Unable to shuffle since I\'m not in a voice channel');
+        return message.reply('Unable to shuffle since I\'m not in a voice channel')
     
-    player.queue.shuffle();
+    player.queue.shuffle()
     
-    message.reply("Shuffled queue");
+    message.reply("Shuffled queue")
 }
 
 module.exports = new Command({
@@ -17,6 +17,6 @@ module.exports = new Command({
     description: "Shuffles the queue",
     permission: "SEND_MESSAGES",
     run(message, args, client){
-        pausePlayer(message, args, client);
+        pausePlayer(message, args, client)
     }
-});
+})

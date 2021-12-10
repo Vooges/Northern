@@ -1,6 +1,6 @@
-const Command = require("../Structures/Command.js");
-const Discord = require("discord.js");
-const pjson = require("../../package.json");
+const Command = require("../Structures/Command.js")
+const Discord = require("discord.js")
+const pjson = require("../../package.json")
 
 async function createEmbed(message, args, client){
     const embed = new Discord.MessageEmbed()
@@ -24,7 +24,7 @@ async function createEmbed(message, args, client){
             inline: true
         })
 
-    message.reply({embeds: [embed]});
+    message.reply({embeds: [embed]})
 }
 
 module.exports = new Command({
@@ -33,6 +33,6 @@ module.exports = new Command({
     description: "Shows some general information about the bot and the Developers",
     permission: "SEND_MESSAGES",
     run(message, args, client){
-        createEmbed(message, args, client);
+        createEmbed(message, args, client)
     }
-});
+})

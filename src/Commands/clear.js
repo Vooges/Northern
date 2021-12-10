@@ -1,26 +1,26 @@
-const Command = require("../Structures/Command.js");
+const Command = require("../Structures/Command.js")
 
 async function clearMessages(message, args, client){
     try{
-        const amount = args[1];
+        const amount = args[1]
 
         if(!amount || isNaN(amount)) 
-            return message.reply(`\`${amount == undefined ? "Nothing" : amount}\` is not a valid number`);
+            return message.reply(`\`${amount == undefined ? "Nothing" : amount}\` is not a valid number`)
 
-        const amountParsed = parseInt(amount);
+        const amountParsed = parseInt(amount)
 
         if(amountParsed > 100) 
-            return message.reply("You cannot clear more than 100 messages at a time");
+            return message.reply("You cannot clear more than 100 messages at a time")
 
-        await message.channel.bulkDelete(amountParsed);
+        await message.channel.bulkDelete(amountParsed)
 
-        const msg = await message.channel.send(`Cleared ${amountParsed} messages!`);
+        const msg = await message.channel.send(`Cleared ${amountParsed} messages!`)
 
-        setTimeout(() => msg.delete(), 5000);
+        setTimeout(() => msg.delete(), 5000)
     } catch (error){
-        console.error(error);
+        client.logger.log(error, __filename)
 
-        message.reply("Something went wrong.");
+        message.reply("Something went wrong.")
     }
 }
 
@@ -30,6 +30,6 @@ module.exports = new Command({
 	description: "Clear up to 100 messages at a time",
 	permission: "MANAGE_MESSAGES",
 	run(message, args, client) {
-		clearMessages(message, args, client);
+		clearMessages(message, args, client)
 	}
-});
+})

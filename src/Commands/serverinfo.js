@@ -1,10 +1,9 @@
-const Command = require("../Structures/Command.js");
-const Discord = require("discord.js");
-const pjson = require("../../package.json");
+const Command = require("../Structures/Command.js")
+const Discord = require("discord.js")
 
 async function createEmbed(message, args, client){
     try{
-        const serverInformation = message.guild;
+        const serverInformation = message.guild
 
         const embed = new Discord.MessageEmbed()
             .setTitle(serverInformation.name)
@@ -41,13 +40,13 @@ async function createEmbed(message, args, client){
                         : "N/A",
                 inline: false
             })
-            .setFooter(`Server created at ${serverInformation.createdAt}`);
+            .setFooter(`Server created at ${serverInformation.createdAt}`)
 
-        message.reply({embeds: [embed]});
+        message.reply({embeds: [embed]})
     } catch (error){
-        console.error(error);
+        client.logger.log(error, __filename)
 
-        message.reply("Something went wrong.");
+        message.reply("Something went wrong.")
     }
 }
 
@@ -57,6 +56,6 @@ module.exports = new Command({
     description: "Shows some general information about the server",
     permission: "SEND_MESSAGES",
     run(message, args, client){
-        createEmbed(message, args, client);
+        createEmbed(message, args, client)
     }
-});
+})
