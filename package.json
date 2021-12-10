@@ -1,6 +1,6 @@
 {
 	"name": "northern",
-	"version": "0.9.8",
+	"version": "0.9.9",
 	"main": "src/index.js",
 	"author": "Vooges",
 	"license": "ISC",

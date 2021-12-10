@@ -1,5 +1,5 @@
-const Discord = require("discord.js");
-const Client = require("./Client.js");
+const Discord = require("discord.js")
+const Client = require("./Client.js")
 
 function runFunction(client, ...eventArgs){
 
@@ -7,9 +7,9 @@ function runFunction(client, ...eventArgs){
 
 class Event{
     constructor(event, runFunction){
-        this.event = event;
-        this.run = runFunction;
+        this.event = event
+        this.run = runFunction
     }
 }
 
-module.exports = Event;
+module.exports = Event

@@ -1,11 +1,11 @@
-const Event = require("../Structures/Event.js");
+const Event = require("../Structures/Event.js")
 
-const Discord = require("discord.js");
+const Discord = require("discord.js")
 
 module.exports = new Event("guildMemberAdd", (client, member) => {
-    const channel = member.guild.systemChannel;
+    const channel = member.guild.systemChannel
 
-    if(!channel) return;
+    if(!channel) return
 
     const embed = new Discord.MessageEmbed()
         .setTitle("New Member")
@@ -20,7 +20,7 @@ module.exports = new Event("guildMemberAdd", (client, member) => {
             name: "User Joined",
             value: member.joinedAt.toUTCString(),
             inline: true,
-        });
+        })
     
-        channel.send({embeds: [embed]});
-});
+        channel.send({embeds: [embed]})
+})
